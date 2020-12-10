@@ -1,6 +1,5 @@
 # manage-account-api
 
-===============
 Projeto Desafio Donus, Gerenciamento de contas Bancárias.
 
  Detalhes da Implementação
