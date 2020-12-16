@@ -1,5 +1,7 @@
 package br.com.donus.manageaccountapi.controller;
 
+import java.time.LocalDate;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,38 +14,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.donus.manageaccountapi.dto.ContaBancariaDTO;
-import br.com.donus.manageaccountapi.service.ContaBancariaService;
+import br.com.donus.manageaccountapi.dto.DepositoDTO;
+import br.com.donus.manageaccountapi.dto.SaqueDTO;
+import br.com.donus.manageaccountapi.service.BankAccountService;
+import br.com.donus.manageaccountapi.service.DepositService;
 
 
 @RestController
 @RequestMapping("/conta-bancaria")
-public class ContaBancariaController {
+public class BankAccountController {
 
 	@Autowired
-	private ContaBancariaService service;
+	private BankAccountService bankAccountService;
+	
+	@Autowired
+	private DepositService depositService;
 	
 	@PostMapping(path = "/criar")
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<?> criar( @RequestBody @Valid ContaBancariaDTO cbDTO) {
-		return new ResponseEntity<>(service.criar(cbDTO), HttpStatus.CREATED);
+		return new ResponseEntity<>(bankAccountService.create(cbDTO), HttpStatus.CREATED);
 	}
 
-//	@RequestMapping(name = "/transferir", method = RequestMethod.POST)
+//	@RequestMapping(path = "/transferir", method = RequestMethod.POST)
 //	public ResponseEntity<LocalDate> transferir() {
 //		return ResponseEntity.ok(LocalDate.now());
 //	}
 //
-//	@RequestMapping(name = "/depositar", method = RequestMethod.POST)
-//	public ResponseEntity<LocalDate> depositar() {
-//		return ResponseEntity.ok(LocalDate.now());
-//	}
+	@PostMapping(path = "/depositar")
+	public ResponseEntity<?> depositar(@RequestBody @Valid DepositoDTO dep) {
+		return new ResponseEntity<>(depositService.deposit(dep), HttpStatus.OK);
+	}
+
+	@PostMapping(path = "/sacar")
+	public ResponseEntity<?> sacar(@RequestBody @Valid SaqueDTO saq) {
+		return ResponseEntity.ok(LocalDate.now());
+	}
 //
-//	@RequestMapping(name = "/sacar", method = RequestMethod.GET)
-//	public ResponseEntity<LocalDate> sacar() {
-//		return ResponseEntity.ok(LocalDate.now());
-//	}
-//
-//	@RequestMapping(name = "/excluir", method = RequestMethod.DELETE)
+//	@RequestMapping(path = "/excluir", method = RequestMethod.DELETE)
 //	public ResponseEntity<LocalDate> excluir() {
 //		return ResponseEntity.ok(LocalDate.now());
 //	}
