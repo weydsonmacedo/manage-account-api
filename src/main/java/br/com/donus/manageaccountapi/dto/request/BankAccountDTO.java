@@ -20,6 +20,7 @@ public class BankAccountDTO {
 	private String name;
 	
 	@NotBlank
+	@Size(min = 11, max = 11, message = "cpf deve ser válido e conter somente números")
 	@CPF
 	private String cpf;
 	

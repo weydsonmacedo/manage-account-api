@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 public class BankTransferDTO {
 
 	@NotBlank(message = "cpf do doador é obrigatório")
+	@Size(min = 11, max = 11, message = "cpf deve ser válido e conter somente números")
 	private String cpfDonor;
 	
 	@Min(1)
