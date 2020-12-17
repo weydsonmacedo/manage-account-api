@@ -3,6 +3,8 @@ package br.com.donus.manageaccountapi.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +20,7 @@ public class BankAccountDTO {
 	private String name;
 	
 	@NotBlank
+	@CPF
 	private String cpf;
 	
 }

@@ -1,13 +1,8 @@
 package br.com.donus.manageaccountapi.config;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,11 +67,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+		logger.error("VIOLAÇÃO DE INTEGRIDADE DE DADOS ENCONTRADA: ",ex);
+		String msg = 
+				"ALGUNS CAMPOS JÁ ESTÃO CADASTRADOS NA BASE DE DADOS, E NÃO PODEM SER DUPLICADOS. ANALISE TODOS OS CAMPOS DA SUA REQUISIÇÃO";
+
 		MessageError message = MessageError.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value())
 				.title("VIOLAÇÃO DE INTEGRIDADE DE DADOS ENCONTRADA")
-				.detail(ex.getMessage())
+				.detail(msg)
 				.developerMessage(ex.getClass().getName()).build();
 				
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
@@ -115,7 +114,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleConstraintViolationException(
 			TransactionSystemException ex) {
 		
-		logger.error("EXCEÇÃO DE NEGÓCIO: ",ex);
+		logger.error("EXCEÇÃO DE TRANSAÇÃO: ",ex);
 //		 	Throwable rootCause = ExceptionUtils.getRootCause(ex);
 //		 ConstraintViolationException constraint;
 //		if(rootCause instanceof ConstraintViolationException) {

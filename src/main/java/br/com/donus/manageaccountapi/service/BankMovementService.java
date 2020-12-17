@@ -11,4 +11,6 @@ public interface BankMovementService {
 	public BankMovement movement(BankAccount donor, BankAccount receiver, MovementType movementType, BigDecimal value );
 	
 	public BankMovement save(BankMovement bankMovement);
+	
+	public BankMovement findById(Long id);
 }

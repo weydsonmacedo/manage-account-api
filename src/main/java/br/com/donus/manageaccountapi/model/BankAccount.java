@@ -13,6 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 public class BankAccount {
@@ -27,6 +28,7 @@ public class BankAccount {
 	
 	@NotNull
 	@Column(unique = true)
+	@CPF
 	private String cpf;
 	
 	@ColumnDefault("'0'")

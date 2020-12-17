@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class ResponseTransactionInfoDTO extends BankAccountInfoDTO {
 
-	private Long transactionId;
+	private String transactionId;
 }

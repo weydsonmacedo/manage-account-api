@@ -13,7 +13,6 @@ import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
 import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.exceptions.BussinessException;
 import br.com.donus.manageaccountapi.model.BankAccount;
-import br.com.donus.manageaccountapi.repository.BankAccountRepository;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.DrawService;
 

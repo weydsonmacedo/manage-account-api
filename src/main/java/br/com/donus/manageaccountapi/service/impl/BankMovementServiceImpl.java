@@ -34,6 +34,11 @@ public class BankMovementServiceImpl implements BankMovementService {
 		return bankMovementRepository.save(bankMovement);
 	}
 	
+	@Override
+	public BankMovement findById(Long id) {
+		 return bankMovementRepository.findById(id).get();
+	}
+	
 	
 
 }

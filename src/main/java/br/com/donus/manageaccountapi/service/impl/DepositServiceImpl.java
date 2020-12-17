@@ -14,7 +14,6 @@ import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankMovement;
 import br.com.donus.manageaccountapi.model.MovementType;
-import br.com.donus.manageaccountapi.repository.BankAccountRepository;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.BankMovementService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
@@ -42,10 +41,11 @@ public class DepositServiceImpl implements DepositService {
 		BigDecimal previousBalance = bacc.getBalance();
 		doDeposit(bacc, dep);
 		BankMovement movement = bankMovementService.movement(bacc, bacc, MovementType.DEPOSIT, dep.getValue());
-		
 		 bacc = baccService.save(bacc);
 		bankStatementService.generateBankStatement(movement, bacc, previousBalance, bacc.getBalance());
-		return Utilities.parseEntityToResponseTransactionInfoDTO(bacc);
+		ResponseTransactionInfoDTO response = Utilities.parseEntityToResponseTransactionInfoDTO(bacc);
+		response.setTransactionId(movement.getTransactionId());
+		return response;
 	}
 	
 	private void doDeposit(BankAccount cb, DepositDTO dep) {

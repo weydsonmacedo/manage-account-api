@@ -2,7 +2,9 @@ package br.com.donus.manageaccountapi.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.Min;
 
 @Entity
@@ -21,9 +23,9 @@ public class BankMovement {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="transaction_sequence")
-	@SequenceGenerator(name="transaction_sequence", sequenceName="tr_seq",initialValue = 1000)
-	private Long transactionId;
+
+	@Column(name = "TRANSACTION_ID",updatable = false, unique = true)
+	private UUID transactionId;
 	
 	@ManyToOne
 	@JoinColumn
@@ -50,11 +52,11 @@ public class BankMovement {
 		this.id = id;
 	}
 
-	public Long getTransactionId() {
-		return transactionId;
+	public String getTransactionId() {
+		return transactionId != null ? transactionId.toString(): null;
 	}
 
-	public void setTransactionId(Long transactionId) {
+	public void setTransactionId(UUID transactionId) {
 		this.transactionId = transactionId;
 	}
 
@@ -97,5 +99,10 @@ public class BankMovement {
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
+	
+	@PrePersist
+    protected void onCreate() {
+		setTransactionId(java.util.UUID.randomUUID());
+    }
 	
 }
