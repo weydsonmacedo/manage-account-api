@@ -36,6 +36,7 @@ public class BankAccount {
 	@Column(insertable = false,nullable = false,updatable = true)
 	private BigDecimal balance;
 	
+	@NotNull
 	private LocalDateTime creationDate;
 	
 	private LocalDateTime modifiedDate;

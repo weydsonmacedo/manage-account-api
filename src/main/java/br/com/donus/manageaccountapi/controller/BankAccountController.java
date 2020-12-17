@@ -16,22 +16,28 @@ import br.com.donus.manageaccountapi.dto.request.DepositDTO;
 import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.DepositService;
-import br.com.donus.manageaccountapi.service.DrawService;
+import br.com.donus.manageaccountapi.service.WithdrawService;
 
 
 @RestController
 @RequestMapping("/bank-account")
 public class BankAccountController {
 
-	@Autowired
 	private BankAccountService bankAccountService;
 	
-	@Autowired
 	private DepositService depositService;
 	
-	@Autowired
-	private DrawService drawService;
+	private WithdrawService drawService;
 	
+	
+	
+	public BankAccountController(BankAccountService bankAccountService, DepositService depositService,
+			WithdrawService drawService) {
+		this.bankAccountService = bankAccountService;
+		this.depositService = depositService;
+		this.drawService = drawService;
+	}
+
 	@PostMapping(path = "/create")
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<?> criar( @RequestBody @Valid BankAccountDTO cbDTO) {

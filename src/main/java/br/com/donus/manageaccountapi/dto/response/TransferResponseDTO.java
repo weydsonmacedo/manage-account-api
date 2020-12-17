@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransferResponseDTO {
 
-	private String transactionId;
+	private String transactionCode;
 	
 	private BankAccountDTO accountBankDonor;
 	

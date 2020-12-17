@@ -14,10 +14,10 @@ import br.com.donus.manageaccountapi.dto.request.BankTransferDTO;
 import br.com.donus.manageaccountapi.dto.response.TransferResponseDTO;
 import br.com.donus.manageaccountapi.exceptions.BussinessException;
 import br.com.donus.manageaccountapi.model.BankAccount;
-import br.com.donus.manageaccountapi.model.BankMovement;
-import br.com.donus.manageaccountapi.model.MovementType;
+import br.com.donus.manageaccountapi.model.BankTransaction;
+import br.com.donus.manageaccountapi.model.TransactionType;
 import br.com.donus.manageaccountapi.service.BankAccountService;
-import br.com.donus.manageaccountapi.service.BankMovementService;
+import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
 import br.com.donus.manageaccountapi.service.BankTransferService;
 
@@ -32,7 +32,7 @@ public class BankTransferServiceImpl implements BankTransferService {
 	BankAccountService bankAccountService;
 	
 	@Autowired
-	BankMovementService bankMovementService;
+	BankTransactionService bankTransactionService;
 	
 	@Autowired
 	BankStatementService  bankStatementService;
@@ -47,20 +47,26 @@ public class BankTransferServiceImpl implements BankTransferService {
 		baDonor = payTransfer(baDonor,bt);
 		baReceiver = receiverTransfer(baReceiver,bt);
 		
-		BankMovement movement = bankMovementService.movement(baDonor, baReceiver, MovementType.TRANSFER, bt.getValue());
+		BankTransaction transaction = generateTransactionAndStatements(bt, baDonor, baReceiver, previousBalanceDonor,previousBalanceReceiver);
 		
-		bankStatementService.generateBankStatement(movement, baDonor, previousBalanceDonor, baDonor.getBalance());
-		bankStatementService.generateBankStatement(movement, baReceiver, previousBalanceReceiver, baReceiver.getBalance());
-		
-		TransferResponseDTO response = generateTransferResponseDTO(bt, baDonor, baReceiver, movement);
+		TransferResponseDTO response = generateTransferResponseDTO(bt, baDonor, baReceiver, transaction);
 		return response;
 	}
 
+	private BankTransaction generateTransactionAndStatements(BankTransferDTO bt, BankAccount baDonor,
+			BankAccount baReceiver, BigDecimal previousBalanceDonor, BigDecimal previousBalanceReceiver) {
+		BankTransaction transaction = bankTransactionService.transact(baDonor, baReceiver, TransactionType.TRANSFER, bt.getValue(),BigDecimal.ZERO,BigDecimal.ZERO);
+		
+		bankStatementService.generateBankStatement(transaction, baDonor, previousBalanceDonor, baDonor.getBalance());
+		bankStatementService.generateBankStatement(transaction, baReceiver, previousBalanceReceiver, baReceiver.getBalance());
+		return transaction;
+	}
+
 	private TransferResponseDTO generateTransferResponseDTO(BankTransferDTO bt, BankAccount baDonor,
-			BankAccount baReceiver, BankMovement movement) {
+			BankAccount baReceiver, BankTransaction transaction) {
 		BankAccountDTO donorDto = Utilities.parseEntityToBankAccountDTO(baDonor);
 		BankAccountDTO receiverDto = Utilities.parseEntityToBankAccountDTO(baReceiver);
-		TransferResponseDTO response = new TransferResponseDTO(movement.getTransactionId(), donorDto, receiverDto, bt.getValue());
+		TransferResponseDTO response = new TransferResponseDTO(transaction.getTransactionCode(), donorDto, receiverDto, bt.getValue());
 		return response;
 	}
 	

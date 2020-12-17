@@ -15,9 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class BankMovement {
+public class BankTransaction {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -25,14 +29,14 @@ public class BankMovement {
 	
 
 	@Column(name = "TRANSACTION_ID",updatable = false, unique = true)
-	private UUID transactionId;
+	private UUID transactionCode;
 	
 	@ManyToOne
 	@JoinColumn
 	private BankAccount donor;
 	
 	@Enumerated(EnumType.STRING)
-	private MovementType movementType;
+	private TransactionType transactionType;
 
 	@ManyToOne
 	@JoinColumn
@@ -41,8 +45,33 @@ public class BankMovement {
 	@Min(1)
 	private BigDecimal value;
 	
+	@ColumnDefault("'0'")
+	@PositiveOrZero
+	private BigDecimal bonification;
+	
+	@ColumnDefault("'0'")
+	@PositiveOrZero
+	private BigDecimal fee;
+	
+	@NotNull
 	private LocalDateTime creationDate;
 	
+
+	public BigDecimal getBonification() {
+		return bonification;
+	}
+
+	public void setBonification(BigDecimal bonification) {
+		this.bonification = bonification;
+	}
+
+	public BigDecimal getFee() {
+		return fee;
+	}
+
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
 
 	public Long getId() {
 		return id;
@@ -52,12 +81,12 @@ public class BankMovement {
 		this.id = id;
 	}
 
-	public String getTransactionId() {
-		return transactionId != null ? transactionId.toString(): null;
+	public String getTransactionCode() {
+		return transactionCode != null ? transactionCode.toString(): null;
 	}
 
-	public void setTransactionId(UUID transactionId) {
-		this.transactionId = transactionId;
+	public void setTransactionCode(UUID transactionCode) {
+		this.transactionCode = transactionCode;
 	}
 
 	public BankAccount getDonor() {
@@ -68,12 +97,13 @@ public class BankMovement {
 		this.donor = donor;
 	}
 
-	public MovementType getMovementType() {
-		return movementType;
+
+	public TransactionType getTransactionType() {
+		return transactionType;
 	}
 
-	public void setMovementType(MovementType movementType) {
-		this.movementType = movementType;
+	public void setTransactionType(TransactionType transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	public BankAccount getReceiver() {
@@ -102,7 +132,7 @@ public class BankMovement {
 	
 	@PrePersist
     protected void onCreate() {
-		setTransactionId(java.util.UUID.randomUUID());
+		setTransactionCode(java.util.UUID.randomUUID());
     }
 	
 }

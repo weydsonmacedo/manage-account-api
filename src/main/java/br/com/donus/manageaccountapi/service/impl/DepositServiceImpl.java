@@ -12,10 +12,10 @@ import br.com.donus.manageaccountapi.Utilities.Utilities;
 import br.com.donus.manageaccountapi.dto.request.DepositDTO;
 import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.model.BankAccount;
-import br.com.donus.manageaccountapi.model.BankMovement;
-import br.com.donus.manageaccountapi.model.MovementType;
+import br.com.donus.manageaccountapi.model.BankTransaction;
+import br.com.donus.manageaccountapi.model.TransactionType;
 import br.com.donus.manageaccountapi.service.BankAccountService;
-import br.com.donus.manageaccountapi.service.BankMovementService;
+import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
 import br.com.donus.manageaccountapi.service.DepositService;
 
@@ -30,7 +30,7 @@ public class DepositServiceImpl implements DepositService {
 	Utilities utilities;
 	
 	@Autowired
-	BankMovementService bankMovementService;
+	BankTransactionService bankTransactionService;
 	
 	@Autowired
 	BankStatementService  bankStatementService;
@@ -40,12 +40,18 @@ public class DepositServiceImpl implements DepositService {
 		BankAccount bacc = utilities.findByCpf(dep.getCpfToDeposit());
 		BigDecimal previousBalance = bacc.getBalance();
 		doDeposit(bacc, dep);
-		BankMovement movement = bankMovementService.movement(bacc, bacc, MovementType.DEPOSIT, dep.getValue());
-		 bacc = baccService.save(bacc);
-		bankStatementService.generateBankStatement(movement, bacc, previousBalance, bacc.getBalance());
-		ResponseTransactionInfoDTO response = Utilities.parseEntityToResponseTransactionInfoDTO(bacc);
-		response.setTransactionId(movement.getTransactionId());
+		bacc = baccService.save(bacc);
+		BankTransaction transaction = generateTransactionAndStatement(dep, bacc, previousBalance);
+		ResponseTransactionInfoDTO response = Utilities.parseEntityToResponseTransactionInfoDTO(bacc,transaction.getTransactionCode());
 		return response;
+	}
+
+	private BankTransaction generateTransactionAndStatement(DepositDTO dep, BankAccount bacc,
+			BigDecimal previousBalance) {
+		BigDecimal bonification = getBonus(dep);
+		BankTransaction transaction = bankTransactionService.transact(bacc, TransactionType.DEPOSIT, dep.getValue(),bonification,BigDecimal.ZERO);
+		bankStatementService.generateBankStatement(transaction, bacc, previousBalance, bacc.getBalance());
+		return transaction;
 	}
 	
 	private void doDeposit(BankAccount cb, DepositDTO dep) {

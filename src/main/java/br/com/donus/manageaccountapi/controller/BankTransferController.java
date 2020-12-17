@@ -26,7 +26,7 @@ public class BankTransferController {
 	
 	@PostMapping(path = "/transfer")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> criar( @RequestBody @Valid BankTransferDTO btDTO) {
+	public ResponseEntity<?> transfer( @RequestBody @Valid BankTransferDTO btDTO) {
 		return new ResponseEntity<>(bankTransferService.transfer(btDTO), HttpStatus.OK);
 	}
 

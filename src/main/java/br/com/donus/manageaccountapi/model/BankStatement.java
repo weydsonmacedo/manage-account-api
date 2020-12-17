@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -22,11 +23,11 @@ public class BankStatement {
 	private Long id;
 	
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn
-	private BankMovement bankMovement;
+	private BankTransaction bankTransaction;
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn
 	private BankAccount bankAccount;
 	
@@ -38,11 +39,12 @@ public class BankStatement {
 	@ColumnDefault("'0'")
 	@PositiveOrZero
 	@Column(nullable = false,updatable = true)
-	private BigDecimal currentBalance;
+	private BigDecimal currentBalance;	
 	
+	@NotNull
 	private LocalDateTime creationDate;
 	
-	
+
 
 	public LocalDateTime getCreationDate() {
 		return creationDate;
@@ -60,12 +62,12 @@ public class BankStatement {
 		this.id = id;
 	}
 
-	public BankMovement getBankMovement() {
-		return bankMovement;
+	public BankTransaction getBankTransaction() {
+		return bankTransaction;
 	}
 
-	public void setBankMovement(BankMovement bankMovement) {
-		this.bankMovement = bankMovement;
+	public void setBankTransaction(BankTransaction bankTransaction) {
+		this.bankTransaction = bankTransaction;
 	}
 
 	public BankAccount getBankAccount() {
