@@ -1,7 +1,5 @@
 package br.com.donus.manageaccountapi.controller;
 
-import java.time.LocalDate;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.donus.manageaccountapi.dto.ContaBancariaDTO;
-import br.com.donus.manageaccountapi.dto.DepositoDTO;
-import br.com.donus.manageaccountapi.dto.SaqueDTO;
+import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
+import br.com.donus.manageaccountapi.dto.request.DepositDTO;
+import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.DepositService;
+import br.com.donus.manageaccountapi.service.DrawService;
 
 
 @RestController
-@RequestMapping("/conta-bancaria")
+@RequestMapping("/bank-account")
 public class BankAccountController {
 
 	@Autowired
@@ -30,9 +29,12 @@ public class BankAccountController {
 	@Autowired
 	private DepositService depositService;
 	
-	@PostMapping(path = "/criar")
+	@Autowired
+	private DrawService drawService;
+	
+	@PostMapping(path = "/create")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> criar( @RequestBody @Valid ContaBancariaDTO cbDTO) {
+	public ResponseEntity<?> criar( @RequestBody @Valid BankAccountDTO cbDTO) {
 		return new ResponseEntity<>(bankAccountService.create(cbDTO), HttpStatus.CREATED);
 	}
 
@@ -41,14 +43,16 @@ public class BankAccountController {
 //		return ResponseEntity.ok(LocalDate.now());
 //	}
 //
-	@PostMapping(path = "/depositar")
-	public ResponseEntity<?> depositar(@RequestBody @Valid DepositoDTO dep) {
+	@PostMapping(path = "/deposit")
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<?> depositar(@RequestBody @Valid DepositDTO dep) {
 		return new ResponseEntity<>(depositService.deposit(dep), HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/sacar")
-	public ResponseEntity<?> sacar(@RequestBody @Valid SaqueDTO saq) {
-		return ResponseEntity.ok(LocalDate.now());
+	@PostMapping(path = "/withdraw")
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<?> sacar(@RequestBody @Valid WithdrawDTO saq) {
+		return new ResponseEntity<>(drawService.draw(saq), HttpStatus.OK);
 	}
 //
 //	@RequestMapping(path = "/excluir", method = RequestMethod.DELETE)

@@ -1,4 +1,4 @@
-package br.com.donus.manageaccountapi.dto;
+package br.com.donus.manageaccountapi.dto.response;
 
 import java.math.BigDecimal;
 
@@ -9,11 +9,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ContaBancariaInfoDTO {
+public class BankAccountInfoDTO {
 
-	private long id;
 	private String cpf;
-	private String nome;
-	private BigDecimal saldo;
-	
+	private String name;
+	private BigDecimal balance;
+
 }

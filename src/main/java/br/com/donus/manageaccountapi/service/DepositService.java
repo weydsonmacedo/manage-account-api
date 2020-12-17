@@ -1,8 +1,8 @@
 package br.com.donus.manageaccountapi.service;
 
-import br.com.donus.manageaccountapi.dto.ContaBancariaInfoDTO;
-import br.com.donus.manageaccountapi.dto.DepositoDTO;
+import br.com.donus.manageaccountapi.dto.request.DepositDTO;
+import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 
 public interface DepositService {
-	public ContaBancariaInfoDTO deposit(DepositoDTO dep);
+	public ResponseTransactionInfoDTO deposit(DepositDTO dep);
 }

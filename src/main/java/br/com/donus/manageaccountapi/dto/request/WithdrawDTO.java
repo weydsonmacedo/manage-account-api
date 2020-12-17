@@ -1,4 +1,4 @@
-package br.com.donus.manageaccountapi.dto;
+package br.com.donus.manageaccountapi.dto.request;
 
 import java.math.BigDecimal;
 
@@ -13,12 +13,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SaqueDTO {
+public class WithdrawDTO {
 	
 	@NotBlank(message = "cpf da conta para saque é obrigatório")
-	private String cpfSaque;
+	private String cpfWithdraw;
 
 	@Min(1)
 	@NotNull(message = "valor para saque é obrigatório")
-	private BigDecimal valor;
+	private BigDecimal value;
+
 }

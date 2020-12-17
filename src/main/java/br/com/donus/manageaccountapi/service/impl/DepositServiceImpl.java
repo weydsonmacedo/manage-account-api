@@ -2,57 +2,65 @@ package br.com.donus.manageaccountapi.service.impl;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.donus.manageaccountapi.Utilities.Utilities;
-import br.com.donus.manageaccountapi.dto.ContaBancariaInfoDTO;
-import br.com.donus.manageaccountapi.dto.DepositoDTO;
+import br.com.donus.manageaccountapi.dto.request.DepositDTO;
+import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.model.BankAccount;
+import br.com.donus.manageaccountapi.model.BankMovement;
+import br.com.donus.manageaccountapi.model.MovementType;
 import br.com.donus.manageaccountapi.repository.BankAccountRepository;
+import br.com.donus.manageaccountapi.service.BankAccountService;
+import br.com.donus.manageaccountapi.service.BankMovementService;
+import br.com.donus.manageaccountapi.service.BankStatementService;
 import br.com.donus.manageaccountapi.service.DepositService;
 
 @Service
 public class DepositServiceImpl implements DepositService {
 	Logger logger = LoggerFactory.getLogger(DepositServiceImpl.class);
+	
 	@Autowired
-	BankAccountRepository cbRepository;
+	BankAccountService baccService;
+	
+	@Autowired
+	Utilities utilities;
+	
+	@Autowired
+	BankMovementService bankMovementService;
+	
+	@Autowired
+	BankStatementService  bankStatementService;
 	
 	@Override
-	public ContaBancariaInfoDTO deposit(DepositoDTO dep) {
-		BankAccount cb = findByCpf(dep.getCpfDepositante());
-		doDeposit(cb, dep);
-		return Utilities.parseEntityToDTO(cbRepository.save(cb));
+	public ResponseTransactionInfoDTO deposit(DepositDTO dep) {
+		BankAccount bacc = utilities.findByCpf(dep.getCpfToDeposit());
+		BigDecimal previousBalance = bacc.getBalance();
+		doDeposit(bacc, dep);
+		BankMovement movement = bankMovementService.movement(bacc, bacc, MovementType.DEPOSIT, dep.getValue());
+		
+		 bacc = baccService.save(bacc);
+		bankStatementService.generateBankStatement(movement, bacc, previousBalance, bacc.getBalance());
+		return Utilities.parseEntityToResponseTransactionInfoDTO(bacc);
 	}
 	
-	private void doDeposit(BankAccount cb, DepositoDTO dep) {
+	private void doDeposit(BankAccount cb, DepositDTO dep) {
 
-		cb.setSaldo(cb.getSaldo().add(dep.getValor()));
+		cb.setBalance(cb.getBalance().add(dep.getValue()));
 
 		BigDecimal bonus = getBonus(dep);
 		
-		cb.setSaldo(cb.getSaldo().add(bonus));
+		cb.setBalance(cb.getBalance().add(bonus));
 
 	}
 	
-	private BankAccount findByCpf(String cpf) {
-		BankAccount cb = cbRepository.findByCpf(cpf);
-		if (cb == null ) {
-			String msg = "O CPF DE NÚMERO: ".concat(cpf).concat(" NÃO EXISTE NA BASE DE DADOS");
-			logger.error("CPF INEXISTENTE: ",cpf);
-			throw new ResourceNotFoundException(msg);
-		}
-		return cb;
-	}
-	
-	private BigDecimal getBonus(DepositoDTO dep) {
+	private BigDecimal getBonus(DepositDTO dep) {
 		MathContext mc = new MathContext(4);
-		BigDecimal bonus = dep.getValor().multiply(new BigDecimal("0.005"), mc);
+		BigDecimal bonus = dep.getValue().multiply(new BigDecimal("0.005"), mc);
 		return bonus;
 	}
 	
