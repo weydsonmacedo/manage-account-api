@@ -68,19 +68,16 @@ class BankTransferServiceImplTest {
 	
 	@Test
 	void testTransferSameAccountBussinessException() {
-		BDDMockito.when(bankAccountServiceMock.findByCpf(ArgumentMatchers.any(String.class)))
-		.thenReturn(MockClasses.getBankAccTestWithId(),MockClasses.getBankAccTestWithId());
-		
-		Assertions.assertThrows(BussinessException.class, () -> service.transfer(MockClasses.getBankTransferDTO()));
+		BussinessException assertThrows = Assertions.assertThrows(BussinessException.class, () -> service.transfer(MockClasses.getBankTransferDTOSameCPF()));
+		Assertions.assertEquals("CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ".concat(MockClasses.getBankTransferDTOSameCPF().getCpfReceiver()),
+				assertThrows.getMessage());
 	}
 	
 	
 	@Test
 	void testTransferValidateBalanceBussinessException() {
-		BDDMockito.when(bankAccountServiceMock.findByCpf(ArgumentMatchers.any(String.class)))
-		.thenReturn(MockClasses.getBankAccount(),MockClasses.getBankAccTestWithId());
-		
-		Assertions.assertThrows(BussinessException.class, () -> service.transfer(MockClasses.getBankTransferDTOValueTen()));
+		BussinessException assertThrows = Assertions.assertThrows(BussinessException.class, () -> service.transfer(MockClasses.getBankTransferDTOValueTen()));
+		Assertions.assertEquals("SEU SALDO É INSUFICIENTE PARA REALIZAR ESTA OPERAÇÃO. SALDO ATUAL: ".concat(MockClasses.getBankAccount().getBalance().toString()), assertThrows.getMessage());
 	}
 
 }

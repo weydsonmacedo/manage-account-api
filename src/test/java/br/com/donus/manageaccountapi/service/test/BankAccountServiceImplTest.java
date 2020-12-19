@@ -59,9 +59,9 @@ class BankAccountServiceImplTest {
 	
 	@Test
 	void testFindByCpfResourceNotFoundException() {
-		BDDMockito.when(baccRepositoryMock.findByCpf(ArgumentMatchers.any()))
+		BDDMockito.when(baccRepositoryMock.findByCpf(ArgumentMatchers.any(String.class)))
 		.thenReturn(null);
-		Assertions.assertNull(baccRepositoryMock.findByCpf(ArgumentMatchers.any()));
+		Assertions.assertNull(baccRepositoryMock.findByCpf(""));
 		String msg = Assertions.assertThrows(ResourceNotFoundException.class, () -> service.findByCpf(MockClasses.getBankAccountDTOTest().getCpf())).getMessage();			
 		Assertions.assertEquals("O CPF DE NÚMERO: 75531547099 NÃO EXISTE NA BASE DE DADOS", msg);
 		

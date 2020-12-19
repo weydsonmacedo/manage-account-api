@@ -108,6 +108,10 @@ public class MockClasses {
 		return new BankTransferDTO(getBankAccTestWithId().getCpf(), BigDecimal.TEN, getBankAccTestWithId2().getCpf());
 	}
 	
+	public static BankTransferDTO getBankTransferDTOSameCPF() {
+		return new BankTransferDTO(getBankAccTestWithId().getCpf(), BigDecimal.TEN, getBankAccTestWithId().getCpf());
+	}
+	
 	public static TransferResponseDTO getTransferResponseDTO() {
 		return new TransferResponseDTO("7cd7acc8-a777-493e-aa82-bb65cf21336b", getBankAccountDTOTest(), getBankAccountDTOTest2(), BigDecimal.ONE);
 	}

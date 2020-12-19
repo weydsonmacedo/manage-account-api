@@ -39,9 +39,9 @@ public class BankTransferServiceImpl implements BankTransferService {
 
 	@Override
 	public TransferResponseDTO transfer(BankTransferDTO bktransDTO) {
+		validateSameAccount(bktransDTO);
 		BankAccount baDonor = bankAccountService.findByCpf(bktransDTO.getCpfDonor());
 		BankAccount baReceiver = bankAccountService.findByCpf(bktransDTO.getCpfReceiver());
-		validateSameAccount(baDonor,baReceiver);
 		BigDecimal previousBalanceDonor = baDonor.getBalance();
 		BigDecimal previousBalanceReceiver = baReceiver.getBalance();
 		
@@ -54,10 +54,10 @@ public class BankTransferServiceImpl implements BankTransferService {
 		return response;
 	}
 
-	private void validateSameAccount(BankAccount baDonor, BankAccount baReceiver) {
-		if (baDonor.getId() == baReceiver.getId()) {
-			String msg = "CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ".concat(baReceiver.getCpf());
-			log.error("CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ",baReceiver.getCpf());
+	private void validateSameAccount(BankTransferDTO bktransDTO) {
+		if (bktransDTO.getCpfDonor().equals(bktransDTO.getCpfReceiver())) {
+			String msg = "CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ".concat(bktransDTO.getCpfReceiver());
+			log.error("CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ",bktransDTO.getCpfReceiver());
 			throw new BussinessException(HttpStatus.PRECONDITION_FAILED,msg);
 		}
 		

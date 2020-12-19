@@ -4,19 +4,23 @@ import java.math.BigDecimal;
 
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferResponseDTO {
 
 	private String transactionCode;
 	
-	private BankAccountDTO accountBankDonor;
+	private BankAccountDTO bankAccountDonor;
 	
-	private BankAccountDTO accountBankReceiver;
+	private BankAccountDTO bankAccountReceiver;
 	
 	private BigDecimal transferedValue;
+
+	
 }
