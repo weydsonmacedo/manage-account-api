@@ -2,9 +2,6 @@ package br.com.donus.manageaccountapi.service.impl;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,29 +16,32 @@ import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
 import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.WithdrawService;
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class WithdrawServiceImpl implements WithdrawService {
-	Logger logger = LoggerFactory.getLogger(WithdrawServiceImpl.class);
 	
-	@Autowired
-	BankAccountService baccService;
+	private BankAccountService baccService;
 	
-	@Autowired
-	Utilities utilities;
+	private BankTransactionService bankTransactionService;
 	
-	@Autowired
-	BankTransactionService bankTransactionService;
+	private BankStatementService  bankStatementService;
 	
-	@Autowired
-	BankStatementService  bankStatementService;
-	
+
+	public WithdrawServiceImpl(BankAccountService baccService, BankTransactionService bankTransactionService,
+			BankStatementService bankStatementService) {
+		this.baccService = baccService;
+		this.bankTransactionService = bankTransactionService;
+		this.bankStatementService = bankStatementService;
+	}
+
 	@Override
 	public ResponseTransactionInfoDTO draw(WithdrawDTO draw) {
-		BankAccount bacc = utilities.findByCpf(draw.getCpfWithdraw());
+		BankAccount bacc = baccService.findByCpf(draw.getCpfWithdraw());
 		BigDecimal previousBalance = bacc.getBalance();
 		withdrawMoney(draw,bacc);
-		 bacc = baccService.save(bacc);
+		 bacc = baccService.update(bacc);
 		 BankTransaction transaction = generateTransactionAndStatement(draw, bacc, previousBalance);
 		return Utilities.parseEntityToResponseTransactionInfoDTO(bacc,transaction.getTransactionCode());
 	}
@@ -65,7 +65,7 @@ public class WithdrawServiceImpl implements WithdrawService {
 	private void validateBalanceForWithdraw(WithdrawDTO draw, BankAccount bacc, String message, String currentBalance) {
 		if (bacc.getBalance().compareTo(draw.getValue()) == -1) {
 			String msg = message.concat(" SALDO ATUAL: ").concat(currentBalance);
-			logger.error("SALDO INSUFICIENTE: ",currentBalance);
+			log.error("SALDO INSUFICIENTE: ",currentBalance);
 			throw new BussinessException(HttpStatus.PRECONDITION_FAILED,msg);
 		}
 	}

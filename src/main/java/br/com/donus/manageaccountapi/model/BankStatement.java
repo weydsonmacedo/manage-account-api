@@ -15,6 +15,13 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class BankStatement {
 
@@ -43,56 +50,6 @@ public class BankStatement {
 	
 	@NotNull
 	private LocalDateTime creationDate;
-	
-
-
-	public LocalDateTime getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public BankTransaction getBankTransaction() {
-		return bankTransaction;
-	}
-
-	public void setBankTransaction(BankTransaction bankTransaction) {
-		this.bankTransaction = bankTransaction;
-	}
-
-	public BankAccount getBankAccount() {
-		return bankAccount;
-	}
-
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
-	}
-
-	public BigDecimal getPreviousBalance() {
-		return previousBalance;
-	}
-
-	public void setPreviousBalance(BigDecimal previousBalance) {
-		this.previousBalance = previousBalance;
-	}
-
-	public BigDecimal getCurrentBalance() {
-		return currentBalance;
-	}
-
-	public void setCurrentBalance(BigDecimal currentBalance) {
-		this.currentBalance = currentBalance;
-	}
 	
 	
 }

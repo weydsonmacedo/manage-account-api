@@ -10,9 +10,4 @@ public interface BankTransactionService {
 
 	public BankTransaction transact(BankAccount donor, BankAccount receiver, TransactionType transactionType, BigDecimal value, BigDecimal bonification, BigDecimal fee );
 	public BankTransaction transact(BankAccount sameAccount, TransactionType transactionType, BigDecimal value, BigDecimal bonification, BigDecimal fee );
-	
-	public BankTransaction save(BankTransaction bankTransaction);
-	
-	public BankTransaction findById(Long id);
-
 }

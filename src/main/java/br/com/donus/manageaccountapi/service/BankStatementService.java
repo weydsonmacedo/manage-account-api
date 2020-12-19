@@ -9,9 +9,7 @@ import br.com.donus.manageaccountapi.model.BankTransaction;
 
 public interface BankStatementService {
 
-	public BankStatement generateBankStatement(BankTransaction bankMovement, BankAccount bankAccount, BigDecimal previousBalance, BigDecimal currentBalance);
-	
-	public BankStatement save(BankStatement bankStatement);
+	public BankStatement generateBankStatement(BankTransaction bankTransaction, BankAccount bankAccount, BigDecimal previousBalance, BigDecimal currentBalance);
 	
 	public BankStatementDTO getStatement(String cpf); 
 }

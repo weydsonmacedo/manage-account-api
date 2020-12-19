@@ -2,7 +2,6 @@ package br.com.donus.manageaccountapi.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
 import br.com.donus.manageaccountapi.dto.request.DepositDTO;
 import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
+import br.com.donus.manageaccountapi.dto.response.BankAccountInfoDTO;
+import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.DepositService;
 import br.com.donus.manageaccountapi.service.WithdrawService;
@@ -40,30 +41,20 @@ public class BankAccountController {
 
 	@PostMapping(path = "/create")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> criar( @RequestBody @Valid BankAccountDTO cbDTO) {
+	public ResponseEntity<BankAccountInfoDTO> create( @RequestBody @Valid BankAccountDTO cbDTO) {
 		return new ResponseEntity<>(bankAccountService.create(cbDTO), HttpStatus.CREATED);
 	}
 
-//	@RequestMapping(path = "/transferir", method = RequestMethod.POST)
-//	public ResponseEntity<LocalDate> transferir() {
-//		return ResponseEntity.ok(LocalDate.now());
-//	}
-//
 	@PostMapping(path = "/deposit")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> depositar(@RequestBody @Valid DepositDTO dep) {
+	public ResponseEntity<ResponseTransactionInfoDTO> deposit(@RequestBody @Valid DepositDTO dep) {
 		return new ResponseEntity<>(depositService.deposit(dep), HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/withdraw")
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> sacar(@RequestBody @Valid WithdrawDTO saq) {
+	public ResponseEntity<ResponseTransactionInfoDTO> withdraw(@RequestBody @Valid WithdrawDTO saq) {
 		return new ResponseEntity<>(drawService.draw(saq), HttpStatus.OK);
 	}
-//
-//	@RequestMapping(path = "/excluir", method = RequestMethod.DELETE)
-//	public ResponseEntity<LocalDate> excluir() {
-//		return ResponseEntity.ok(LocalDate.now());
-//	}
 
 }

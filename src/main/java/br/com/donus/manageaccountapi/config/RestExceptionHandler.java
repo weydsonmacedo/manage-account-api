@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +24,6 @@ import br.com.donus.manageaccountapi.exceptions.ValidationError;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-	Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 	@Override
 	public ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 
@@ -39,7 +36,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		String messages = fieldErros.stream().map(FieldError :: getDefaultMessage).collect(Collectors.joining(","));
 		ValidationError message = ValidationError.builder()
 			.timestamp(LocalDateTime.now())
-			.status(HttpStatus.NOT_FOUND.value())
+			.status(HttpStatus.BAD_REQUEST.value())
 			.title("ARGUMENTO INVÁLIDO")
 			.developerMessage(ex.getClass().getName())
 			.field(fields)
@@ -48,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 			.build();
 		
 		
-		return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
@@ -114,46 +111,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleConstraintViolationException(
 			TransactionSystemException ex) {
 		
-		logger.error("EXCEÇÃO DE TRANSAÇÃO: ",ex);
-//		 	Throwable rootCause = ExceptionUtils.getRootCause(ex);
-//		 ConstraintViolationException constraint;
-//		if(rootCause instanceof ConstraintViolationException) {
-//			constraint  =  (ConstraintViolationException) tr;
-//		
-//		Set<ConstraintViolation<?>> constraintViolations = constraint.getConstraintViolations();
-//		
-//		Set<String> fields = new HashSet<>(constraintViolations.size());
-//		fields.addAll(constraintViolations.stream()
-//		        .map(constraintViolation -> String.format("%s ", constraintViolation.getPropertyPath()))
-//		        .collect(Collectors.toList()));
-//		String fds = fields.stream().collect(Collectors.joining(";"));
-//		
-//		Set<String> msg = new HashSet<>(constraintViolations.size());
-//		msg.addAll(constraintViolations.stream()
-//		        .map(constraintViolation -> String.format("%s ", constraintViolation.getInvalidValue()))
-//		        .collect(Collectors.toList()));
-//		String messages = msg.stream().collect(Collectors.joining(";"));
-//		
-//		ValidationError message = ValidationError.builder()
-//			.timestamp(LocalDateTime.now())
-//			.status(HttpStatus.NOT_FOUND.value())
-//			.title("ARGUMENTO INVÁLIDO")
-//			.developerMessage(tr.getClass().getName())
-//			.field(fds)
-//			.fieldMessage(messages)
-//			.detail(tr.getMessage())
-//			.build();
-//		return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
-//		
-//		}
-		
+		logger.error("EXCEÇÃO DE TRANSAÇÃO: ",ex);		
 
 		MessageError message = MessageError.builder()
 				.timestamp(LocalDateTime.now())
-				.status(HttpStatus.BAD_REQUEST.value())
-				.title("OCORREU UM ERRO INESPERADO")
+				.status(HttpStatus.CONFLICT.value())
+				.title("OCORREU UM ERRO INESPERADO - VIOLAÇÃO DE RESTRIÇÃO")
 				.detail(ex.getMessage())
 				.developerMessage(ex.getClass().getName()).build();
-		return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(message, HttpStatus.CONFLICT);
 	}
 }

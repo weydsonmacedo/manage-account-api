@@ -3,9 +3,6 @@ package br.com.donus.manageaccountapi.service.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.donus.manageaccountapi.Utilities.Utilities;
@@ -15,32 +12,34 @@ import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankTransaction;
 import br.com.donus.manageaccountapi.model.TransactionType;
 import br.com.donus.manageaccountapi.service.BankAccountService;
-import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
+import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.DepositService;
 
 @Service
 public class DepositServiceImpl implements DepositService {
-	Logger logger = LoggerFactory.getLogger(DepositServiceImpl.class);
 	
-	@Autowired
-	BankAccountService baccService;
+	private BankAccountService baccService;
 	
-	@Autowired
-	Utilities utilities;
+	private BankTransactionService bankTransactionService;
 	
-	@Autowired
-	BankTransactionService bankTransactionService;
+	private BankStatementService  bankStatementService;
 	
-	@Autowired
-	BankStatementService  bankStatementService;
 	
+
+	public DepositServiceImpl(BankAccountService baccService, BankTransactionService bankTransactionService,
+			BankStatementService bankStatementService) {
+		this.baccService = baccService;
+		this.bankTransactionService = bankTransactionService;
+		this.bankStatementService = bankStatementService;
+	}
+
 	@Override
 	public ResponseTransactionInfoDTO deposit(DepositDTO dep) {
-		BankAccount bacc = utilities.findByCpf(dep.getCpfToDeposit());
+		BankAccount bacc = baccService.findByCpf(dep.getCpfToDeposit());
 		BigDecimal previousBalance = bacc.getBalance();
 		doDeposit(bacc, dep);
-		bacc = baccService.save(bacc);
+		bacc = baccService.update(bacc);
 		BankTransaction transaction = generateTransactionAndStatement(dep, bacc, previousBalance);
 		ResponseTransactionInfoDTO response = Utilities.parseEntityToResponseTransactionInfoDTO(bacc,transaction.getTransactionCode());
 		return response;

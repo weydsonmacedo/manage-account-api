@@ -20,6 +20,13 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class BankTransaction {
 
@@ -57,78 +64,11 @@ public class BankTransaction {
 	private LocalDateTime creationDate;
 	
 
-	public BigDecimal getBonification() {
-		return bonification;
-	}
-
-	public void setBonification(BigDecimal bonification) {
-		this.bonification = bonification;
-	}
-
-	public BigDecimal getFee() {
-		return fee;
-	}
-
-	public void setFee(BigDecimal fee) {
-		this.fee = fee;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getTransactionCode() {
 		return transactionCode != null ? transactionCode.toString(): null;
 	}
 
-	public void setTransactionCode(UUID transactionCode) {
-		this.transactionCode = transactionCode;
-	}
-
-	public BankAccount getDonor() {
-		return donor;
-	}
-
-	public void setDonor(BankAccount donor) {
-		this.donor = donor;
-	}
-
-
-	public TransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
-	}
-
-	public BankAccount getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(BankAccount receiver) {
-		this.receiver = receiver;
-	}
-
-	public LocalDateTime getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public BigDecimal getValue() {
-		return value;
-	}
-
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
 	
 	@PrePersist
     protected void onCreate() {

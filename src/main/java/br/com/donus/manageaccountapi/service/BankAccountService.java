@@ -8,5 +8,7 @@ public interface BankAccountService {
 
 	public BankAccountInfoDTO create(BankAccountDTO cbDTO);
 	
-	public BankAccount save(BankAccount entity);
+	public BankAccount update(BankAccount entity);
+	
+	public BankAccount findByCpf(String cpf);
 }

@@ -5,12 +5,7 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
 import br.com.donus.manageaccountapi.dto.response.BankAccountInfoDTO;
@@ -20,14 +15,11 @@ import br.com.donus.manageaccountapi.dto.response.StatementDTO;
 import br.com.donus.manageaccountapi.exceptions.BussinessException;
 import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankStatement;
-import br.com.donus.manageaccountapi.repository.BankAccountRepository;
+import lombok.extern.log4j.Log4j2;
 
-@Service
+@Log4j2
 public class Utilities {
-	Logger logger = LoggerFactory.getLogger(Utilities.class);
 	
-	@Autowired
-	BankAccountRepository cbRepository;
 	
 	public static BankAccountInfoDTO parseEntityToDTO(BankAccount entity) {
 		BankAccountInfoDTO cbDTO = new BankAccountInfoDTO();
@@ -57,17 +49,7 @@ public class Utilities {
 		cb.setName(cbDTO.getName());
 		cb.setCpf(cbDTO.getCpf());
 		return cb;
-	}
-	
-	public BankAccount findByCpf(String cpf) {
-		BankAccount cb = cbRepository.findByCpf(cpf);
-		if (cb == null ) {
-			String msg = "O CPF DE NÚMERO: ".concat(cpf).concat(" NÃO EXISTE NA BASE DE DADOS");
-			logger.error("CPF INEXISTENTE: ",cpf);
-			throw new ResourceNotFoundException(msg);
-		}
-		return cb;
-	}
+	}	
 	
 	public static BankAccountDTO parseEntityToBankAccountDTO(BankAccount entity) {
 		BankAccountDTO cbDTO = new BankAccountDTO();
@@ -78,6 +60,7 @@ public class Utilities {
 	
 	public static BankStatementDTO parseListToBankStatementDTO(List<BankStatement>  listBankStatement) {
 		if (listBankStatement.isEmpty()) {
+			log.error("NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA: ");
 			throw new  BussinessException(HttpStatus.NO_CONTENT,"NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA");
 		}
 		BankAccountInfoDTO accInfo = Utilities.parseEntityToDTO(listBankStatement.get(0).getBankAccount());

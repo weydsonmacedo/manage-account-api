@@ -2,9 +2,6 @@ package br.com.donus.manageaccountapi.service.impl;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,40 +14,53 @@ import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankTransaction;
 import br.com.donus.manageaccountapi.model.TransactionType;
 import br.com.donus.manageaccountapi.service.BankAccountService;
-import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
+import br.com.donus.manageaccountapi.service.BankTransactionService;
 import br.com.donus.manageaccountapi.service.BankTransferService;
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class BankTransferServiceImpl implements BankTransferService {
-	Logger logger = LoggerFactory.getLogger(BankTransferServiceImpl.class);
 	
-	@Autowired
-	Utilities utilities;
 	
-	@Autowired
-	BankAccountService bankAccountService;
+	private BankAccountService bankAccountService;
 	
-	@Autowired
-	BankTransactionService bankTransactionService;
+	private BankTransactionService bankTransactionService;
 	
-	@Autowired
-	BankStatementService  bankStatementService;
+	private BankStatementService  bankStatementService;
+
+	public BankTransferServiceImpl(BankAccountService bankAccountService, BankTransactionService bankTransactionService,
+			BankStatementService bankStatementService) {
+		this.bankAccountService = bankAccountService;
+		this.bankTransactionService = bankTransactionService;
+		this.bankStatementService = bankStatementService;
+	}
 
 	@Override
-	public TransferResponseDTO transfer(BankTransferDTO bt) {
-		BankAccount baDonor = utilities.findByCpf(bt.getCpfDonor());
-		BankAccount baReceiver = utilities.findByCpf(bt.getCpfReceiver());
+	public TransferResponseDTO transfer(BankTransferDTO bktransDTO) {
+		BankAccount baDonor = bankAccountService.findByCpf(bktransDTO.getCpfDonor());
+		BankAccount baReceiver = bankAccountService.findByCpf(bktransDTO.getCpfReceiver());
+		validateSameAccount(baDonor,baReceiver);
 		BigDecimal previousBalanceDonor = baDonor.getBalance();
 		BigDecimal previousBalanceReceiver = baReceiver.getBalance();
 		
-		baDonor = payTransfer(baDonor,bt);
-		baReceiver = receiverTransfer(baReceiver,bt);
+		baDonor = payTransfer(baDonor,bktransDTO);
+		baReceiver = receiverTransfer(baReceiver,bktransDTO);
 		
-		BankTransaction transaction = generateTransactionAndStatements(bt, baDonor, baReceiver, previousBalanceDonor,previousBalanceReceiver);
+		BankTransaction transaction = generateTransactionAndStatements(bktransDTO, baDonor, baReceiver, previousBalanceDonor,previousBalanceReceiver);
 		
-		TransferResponseDTO response = generateTransferResponseDTO(bt, baDonor, baReceiver, transaction);
+		TransferResponseDTO response = generateTransferResponseDTO(bktransDTO, baDonor, baReceiver, transaction);
 		return response;
+	}
+
+	private void validateSameAccount(BankAccount baDonor, BankAccount baReceiver) {
+		if (baDonor.getId() == baReceiver.getId()) {
+			String msg = "CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ".concat(baReceiver.getCpf());
+			log.error("CONTAS IGUAIS! NÃO É PERMITIDO A TRANSFERÊNCIA PARA A MESMA CONTA. CPF: ",baReceiver.getCpf());
+			throw new BussinessException(HttpStatus.PRECONDITION_FAILED,msg);
+		}
+		
 	}
 
 	private BankTransaction generateTransactionAndStatements(BankTransferDTO bt, BankAccount baDonor,
@@ -73,19 +83,20 @@ public class BankTransferServiceImpl implements BankTransferService {
 	private BankAccount payTransfer(BankAccount baDonor, BankTransferDTO bt) {
 		validateBalance(baDonor.getBalance(),bt.getValue());
 		baDonor.setBalance(baDonor.getBalance().subtract(bt.getValue()));
-		return bankAccountService.save(baDonor);
+		return bankAccountService.update(baDonor);
+	}
+
+	private BankAccount receiverTransfer(BankAccount baReceiver, BankTransferDTO bt) {
+		baReceiver.setBalance(baReceiver.getBalance().add(bt.getValue()));
+		return bankAccountService.update(baReceiver);
 	}
 	
 	private void validateBalance(BigDecimal balance, BigDecimal value) {
 		if (balance.compareTo(value) == -1) {
 			String msg = "SEU SALDO É INSUFICIENTE PARA REALIZAR ESTA OPERAÇÃO. SALDO ATUAL: ".concat(balance.toString());
-			logger.error("SALDO INSUFICIENTE: ",balance);
-			throw new BussinessException(HttpStatus.PRECONDITION_FAILED,msg);
+			log.error("SALDO INSUFICIENTE: ", balance);
+			throw new BussinessException(HttpStatus.PRECONDITION_FAILED, msg);
 		}
 	}
-
-	private BankAccount receiverTransfer(BankAccount baReceiver, BankTransferDTO bt) {
-		baReceiver.setBalance(baReceiver.getBalance().add(bt.getValue()));
-		return bankAccountService.save(baReceiver);
-	}
+	
 }
