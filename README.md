@@ -28,6 +28,7 @@ Pre-requisitos para o Funcionamento:
 * 1º - apontado para AWS, configurado para testes de desenvolvimento.
 * 2º - apontado para AWS pelo Elastic Beanstalk, ambiente em deploy, para testes remotos.
 * 3º - H2. configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
+* O projeto tem a Autenticação do Tipo Basic. (Login e senha se encontram no código, e na pasta POSTMAN_ENDPOINTS, dentro do projeto)
 
 Instalação:
 -------
@@ -36,7 +37,8 @@ Instalação:
 * 2 - fazer o download do repositório
 * 3 - importar como projeto MAVEN. APÓS, RODAR: MAVEN -> UPDATE  / MAVEN -> CLEAN / MAVEN -> INSTALL
 * 4 - Dentro do projeto tem uma pasta chamada: POSTMAN_ENDPOINTS. Nela contem todas as requisições necessárias para acessar o projeto.
-* 5 - A aplicação também encontra-se com deploy para teste. 
+* 5 - Importe no postman o arquivo *conta-bancaria.postman_collection.json* que se encontra dentro da pasta  POSTMAN_ENDPOINTS. (O basic ja está configurado).
+* 6 - A aplicação também encontra-se com deploy para teste. (http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/health)
 
 LINK DO SWAGGER:
 ----
