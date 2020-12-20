@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "ede43ba0-b547-4679-8655-ca13bcf3c60b",
+		"name": "conta-bancaria",
+		"description": "requisições de contas bancárias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "health",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/health",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"health"
+					]
+				},
+				"description": "health"
+			},
+			"response": []
+		},
+		{
+			"name": "criar",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"DAIALE LOPES CAL\",\r\n    \"cpf\":\"68418867043\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/bank-account/create",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"bank-account",
+						"create"
+					]
+				},
+				"description": "criar conta bancaria"
+			},
+			"response": []
+		},
+		{
+			"name": "depositar",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cpfToDeposit\":\"68418867043\",\r\n    \"value\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/account-operation/deposit",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"account-operation",
+						"deposit"
+					]
+				},
+				"description": "depositar valor na conta bancária"
+			},
+			"response": []
+		},
+		{
+			"name": "sacar",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cpfWithdraw\":\"68418867043\",\r\n    \"value\":25\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/account-operation/withdraw",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"account-operation",
+						"withdraw"
+					]
+				},
+				"description": "depositar valor na conta bancária"
+			},
+			"response": []
+		},
+		{
+			"name": "transferir",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cpfDonor\":\"05760874594\",\r\n    \"value\":25,\r\n    \"cpfReceiver\":\"05631097508\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/bank-transfer/transfer",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"bank-transfer",
+						"transfer"
+					]
+				},
+				"description": "transferencia bancária"
+			},
+			"response": []
+		},
+		{
+			"name": "extrato",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://manage-account-api-dev.us-east-1.elasticbeanstalk.com/manage-account-api/bank-statement/statement/68418867043",
+					"protocol": "http",
+					"host": [
+						"manage-account-api-dev",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"manage-account-api",
+						"bank-statement",
+						"statement",
+						"68418867043"
+					]
+				},
+				"description": "extrato bancário"
+			},
+			"response": []
+		},
+		{
+			"name": "deletar",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "manage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "donus",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/manage-account-api/bank-account/delete/68418867043",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"manage-account-api",
+						"bank-account",
+						"delete",
+						"68418867043"
+					]
+				},
+				"description": "deletar uma conta bancaria"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "2d4ac005-c4a1-465a-8ebd-9ab85a7f603b",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "user",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
