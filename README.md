@@ -20,22 +20,23 @@ Projeto Desafio Donus, Gerenciamento de contas Bancárias.
 
 Pre-requisitos para o Funcionamento:
 -------
-JAVA 11.
-MAVEN.
-POSTMAN OU QUALQUER OUTRO DO RAMO.
-O projeto conta com 3 Bancos de dados:
-1º - apontado para AWS, configurado para testes de desenvolvimento.
-2º - apontado para AWS pelo Elastic Beanstalk, ambiente em deploy, para testes remotos.
-3º - H2. configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
+
+* JAVA 11,
+* MAVEN,
+* POSTMAN OU QUALQUER OUTRO DO RAMO,
+* O projeto conta com 3 Bancos de dados:
+* 1º - apontado para AWS, configurado para testes de desenvolvimento.
+* 2º - apontado para AWS pelo Elastic Beanstalk, ambiente em deploy, para testes remotos.
+* 3º - H2. configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
 
 Instalação:
 -------
 
-1 - Instalar Eclipse compatível com java 11. (Version: 2020-09) ou superior.
-2 - fazer o download do repositório
-3 - importar como projeto MAVEN. APÓS, RODAR: MAVEN -> UPDATE  / MAVEN -> CLEAN / MAVEN -> INSTALL
-4 - Dentro do projeto tem uma pasta chamada: POSTMAN_ENDPOINTS. Nela contem todas as requisições necessárias para acessar o projeto.
-5 - A aplicação também encontra-se com deploy para teste. 
+* 1 - Instalar Eclipse compatível com java 11. (Version: 2020-09) ou superior.
+* 2 - fazer o download do repositório
+* 3 - importar como projeto MAVEN. APÓS, RODAR: MAVEN -> UPDATE  / MAVEN -> CLEAN / MAVEN -> INSTALL
+* 4 - Dentro do projeto tem uma pasta chamada: POSTMAN_ENDPOINTS. Nela contem todas as requisições necessárias para acessar o projeto.
+* 5 - A aplicação também encontra-se com deploy para teste. 
 
 LINK DO SWAGGER:
 ----
