@@ -49,6 +49,11 @@ public class MockClasses {
 		return new BankAccountDTO("nome de teste 1","75531547099");
 	}
 	
+	public static BankAccountDTO getBankAccountDTOTestWrongCPF() {
+		return new BankAccountDTO("nome de teste 1","01234568901");
+	}
+	
+	
 	public static BankAccountDTO getBankAccountDTOTest2() {
 		return new BankAccountDTO("nome de teste 2","86267885097");
 	}
