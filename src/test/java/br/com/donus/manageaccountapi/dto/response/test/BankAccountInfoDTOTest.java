@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.donus.manageaccountapi.dto.response.BankAccountInfoDTO;
+import br.com.donus.manageaccountapi.model.Status;
 
 @DisplayName("Tests for BankAccountInfoDTOTest  class ")
 @ExtendWith(SpringExtension.class)
@@ -23,7 +24,8 @@ class BankAccountInfoDTOTest {
 		dto.setName("teste");
 		dto.setBankAccCreationDate(LocalDateTime.now());
 		dto.setBalance(BigDecimal.ONE);
-		BankAccountInfoDTO dto2 = new BankAccountInfoDTO(dto.getCpf(), dto.getName(), dto.getBalance(), dto.getBankAccCreationDate());
+		dto.setAccountStatus(Status.ACTIVE);
+		BankAccountInfoDTO dto2 = new BankAccountInfoDTO(dto.getCpf(), dto.getName(), dto.getBalance(), dto.getBankAccCreationDate(),dto.getAccountStatus());
 		Assertions.assertNotNull(dto.toString());
 		Assertions.assertNotNull(dto);
 		Assertions.assertNotNull(dto2);

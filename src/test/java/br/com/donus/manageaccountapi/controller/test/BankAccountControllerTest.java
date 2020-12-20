@@ -14,16 +14,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.donus.manageaccountapi.controller.BankAccountController;
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
-import br.com.donus.manageaccountapi.dto.request.DepositDTO;
-import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
 import br.com.donus.manageaccountapi.dto.response.BankAccountInfoDTO;
-import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.DepositService;
 import br.com.donus.manageaccountapi.service.WithdrawService;
 import util.MockClasses;
 
-@DisplayName("Tests for the bank account Controller ")
+@DisplayName("Tests for the BankAccountController ")
 @ExtendWith(SpringExtension.class)
 public class BankAccountControllerTest {
 
@@ -40,21 +37,13 @@ public class BankAccountControllerTest {
 	
 	@BeforeEach
 	void precondition() {
-		successCase();		
-	}
-
-
-	private void successCase() {
 		BDDMockito.when(bankAccountServiceMock.create(ArgumentMatchers.any(BankAccountDTO.class)))
-		.thenReturn(MockClasses.getBankAccountInfoDTO());
+		.thenReturn(MockClasses.getBankAccountInfoDTO());	
 		
-		BDDMockito.when(depositServiceMock.deposit(ArgumentMatchers.any(DepositDTO.class)))
-		.thenReturn(MockClasses.getResponseTransactionInfoDTO());
-		
-		BDDMockito.when(drawServiceMock.draw(ArgumentMatchers.any(WithdrawDTO.class)))
-		.thenReturn(MockClasses.getResponseTransactionInfoDTO());
+		BDDMockito.when(bankAccountServiceMock.delete(ArgumentMatchers.any(String.class)))
+		.thenReturn("");
 	}
-	
+
 	
 	@Test
 	public void testCreateSucessful() {
@@ -63,17 +52,12 @@ public class BankAccountControllerTest {
 		Assertions.assertNotNull(dto);
 	}
 		
+
 	@Test
-	public void testDepositSucessful() {
+	public void testDeleteSucessful() {
 		
-		ResponseTransactionInfoDTO dto = controller.deposit(MockClasses.getDepositDTO()).getBody();
-		Assertions.assertNotNull(dto);
+		String msg = controller.delete(MockClasses.getBankAccountDTOTest().getCpf()).getBody();
+		Assertions.assertNotNull(msg);
 	}
-	
-	@Test
-	public void testWithdrawSucessful() {
 		
-		ResponseTransactionInfoDTO dto = controller.withdraw(MockClasses.getWithdrawDTO()).getBody();
-		Assertions.assertNotNull(dto);
-	}
 }

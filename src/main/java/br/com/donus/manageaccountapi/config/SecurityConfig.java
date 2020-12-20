@@ -22,8 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		auth.inMemoryAuthentication().withUser("manage").password(encoder.encode("donus")).roles("user")
-		.and().
-		withUser("admin").password(encoder.encode("donus")).roles("user","admin");
+		auth.inMemoryAuthentication().withUser("manage").password(encoder.encode("donus")).roles("user").
+		and().
+		withUser("admin").password(encoder.encode("donus")).roles("user","admin").
+		and().
+		withUser("user_test").password(encoder.encode("password_test")).roles("user");
 	}
 }

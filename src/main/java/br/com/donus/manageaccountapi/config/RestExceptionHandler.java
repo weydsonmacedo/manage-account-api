@@ -65,14 +65,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
 		logger.error("VIOLAÇÃO DE INTEGRIDADE DE DADOS ENCONTRADA: ",ex);
-		String msg = 
-				"ALGUNS CAMPOS JÁ ESTÃO CADASTRADOS NA BASE DE DADOS, E NÃO PODEM SER DUPLICADOS. ANALISE TODOS OS CAMPOS DA SUA REQUISIÇÃO";
-
+	
 		MessageError message = MessageError.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value())
 				.title("VIOLAÇÃO DE INTEGRIDADE DE DADOS ENCONTRADA")
-				.detail(msg)
+				.detail(ex.getMessage())
 				.developerMessage(ex.getClass().getName()).build();
 				
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);

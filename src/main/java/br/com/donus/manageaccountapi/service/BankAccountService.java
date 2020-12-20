@@ -11,4 +11,6 @@ public interface BankAccountService {
 	public BankAccount update(BankAccount entity);
 	
 	public BankAccount findByCpf(String cpf);
+	
+	public String delete(String cpf);
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.donus.manageaccountapi.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,7 @@ public class BankAccountInfoDTO {
 	private BigDecimal balance;
 	@JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime bankAccCreationDate;
+	
+	private Status AccountStatus;
 
 }

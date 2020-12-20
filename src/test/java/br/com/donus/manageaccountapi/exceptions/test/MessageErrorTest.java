@@ -48,7 +48,7 @@ class MessageErrorTest {
 	}
 
 	@Test
-	private void toStringTest() {
+	 void toStringTest() {
 	String msg = MessageError.builder()
 		.timestamp(LocalDateTime.now())
 		.status(HttpStatus.NOT_FOUND.value())

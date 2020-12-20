@@ -42,7 +42,7 @@ class ValidationErrorTest {
 	}
 
 	@Test
-	private void toStringTest() {
+	 void toStringTest() {
 	String msg =	ValidationError.builder()
 		.timestamp(LocalDateTime.now())
 		.status(HttpStatus.BAD_REQUEST.value())

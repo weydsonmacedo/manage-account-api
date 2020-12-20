@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,6 +44,10 @@ public class BankAccount {
 	@PositiveOrZero
 	@Column(insertable = false,nullable = false,updatable = true)
 	private BigDecimal balance;
+	
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	private Status status;
 	
 	@NotNull
 	private LocalDateTime creationDate;

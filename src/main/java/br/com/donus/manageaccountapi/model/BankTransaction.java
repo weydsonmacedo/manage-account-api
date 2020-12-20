@@ -43,6 +43,7 @@ public class BankTransaction {
 	private BankAccount donor;
 	
 	@Enumerated(EnumType.STRING)
+	@NotNull
 	private TransactionType transactionType;
 
 	@ManyToOne

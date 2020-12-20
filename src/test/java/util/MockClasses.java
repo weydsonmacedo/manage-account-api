@@ -16,44 +16,45 @@ import br.com.donus.manageaccountapi.dto.response.TransferResponseDTO;
 import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankStatement;
 import br.com.donus.manageaccountapi.model.BankTransaction;
+import br.com.donus.manageaccountapi.model.Status;
 import br.com.donus.manageaccountapi.model.TransactionType;
 
 public class MockClasses {
 
 	public static BankAccount getBankAccTestWithOutId() {
-		return new BankAccount(null, "nome de teste", "75531547099", BigDecimal.ZERO, LocalDateTime.now(), LocalDateTime.now());
+		return new BankAccount(null, "nome de teste", "75531547099", BigDecimal.ZERO,Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now());
 	}
 	
 	public static BankAccount getBankAccTestWithId() {
-		return new BankAccount(1L, "nome de teste", "75531547099", BigDecimal.ZERO, LocalDateTime.now(), LocalDateTime.now());
+		return new BankAccount(1L, "nome de teste 1", "75531547099", BigDecimal.ZERO,Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now());
 	}
 	
 	public static BankAccount getBankAccTestWithId2() {
-		return new BankAccount(2L, "teste 2", "86267885097", BigDecimal.ONE, LocalDateTime.now(), LocalDateTime.now());
+		return new BankAccount(2L, "nome de teste 2", "86267885097", BigDecimal.ONE,Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now());
 	}
 	
 	public static BankAccount getBankAccount() {
-		return new BankAccount(2L, "teste 2", "86267885097", BigDecimal.ONE, LocalDateTime.now(), LocalDateTime.now());
+		return new BankAccount(2L, "teste 2", "86267885097", BigDecimal.ONE,Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now());
+	}
+	
+	public static BankAccount getBankAccountINACTIVE() {
+		return new BankAccount(2L, "teste 3", "75531547099", BigDecimal.ONE,Status.INACTIVE, LocalDateTime.now(), LocalDateTime.now());
 	}
 	
 	public static BankAccount getBankAccountTENOfBalance() {
-		return new BankAccount(2L, "teste 2", "86267885097", BigDecimal.TEN, LocalDateTime.now(), LocalDateTime.now());
+		return new BankAccount(2L, "teste 2", "86267885097", BigDecimal.TEN,Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now());
 	}
 	
 	public static BankAccountDTO getBankAccountDTOTest() {
-		return new BankAccountDTO("nome de teste","75531547099");
+		return new BankAccountDTO("nome de teste 1","75531547099");
 	}
 	
 	public static BankAccountDTO getBankAccountDTOTest2() {
-		return new BankAccountDTO("teste","86267885097");
-	}
-	
-	public static BankAccountDTO getBankAccountDTOBlankCPF() {
-		return new BankAccountDTO("nome de teste","");
+		return new BankAccountDTO("nome de teste 2","86267885097");
 	}
 	
 	public static BankAccountInfoDTO getBankAccountInfoDTO() {
-		return new BankAccountInfoDTO("75531547099","nome de teste",BigDecimal.ZERO,LocalDateTime.now());
+		return new BankAccountInfoDTO("75531547099","nome de teste",BigDecimal.ZERO,LocalDateTime.now(),Status.ACTIVE);
 	}
 	
 	public static ResponseTransactionInfoDTO getResponseTransactionInfoDTO() {

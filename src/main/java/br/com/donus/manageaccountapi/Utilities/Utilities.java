@@ -27,17 +27,19 @@ public class Utilities {
 		cbDTO.setName(entity.getName());
 		cbDTO.setBalance(validateBalance(entity));
 		cbDTO.setBankAccCreationDate(entity.getCreationDate());
+		cbDTO.setAccountStatus(entity.getStatus());
 		return cbDTO;
 	}
 	
 	public static ResponseTransactionInfoDTO parseEntityToResponseTransactionInfoDTO(BankAccount entity, String transactionCode) {
-		ResponseTransactionInfoDTO cbDTO = new ResponseTransactionInfoDTO();
-		cbDTO.setCpf(entity.getCpf());
-		cbDTO.setName(entity.getName());
-		cbDTO.setBalance(validateBalance(entity));
-		cbDTO.setBankAccCreationDate(entity.getCreationDate());
-		cbDTO.setTransactionCode(transactionCode);
-		return cbDTO;
+		ResponseTransactionInfoDTO responseTransactDTO = new ResponseTransactionInfoDTO();
+		responseTransactDTO.setCpf(entity.getCpf());
+		responseTransactDTO.setName(entity.getName());
+		responseTransactDTO.setBalance(validateBalance(entity));
+		responseTransactDTO.setBankAccCreationDate(entity.getCreationDate());
+		responseTransactDTO.setTransactionCode(transactionCode);
+		responseTransactDTO.setAccountStatus(entity.getStatus());
+		return responseTransactDTO;
 	}
 	
 	public static BigDecimal validateBalance(BankAccount entity) {
