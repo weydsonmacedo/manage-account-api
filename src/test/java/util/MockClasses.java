@@ -127,8 +127,9 @@ public class MockClasses {
 		return new BankStatement(1L, getBankTransaction(), getBankAccTestWithId2(), BigDecimal.TEN, BigDecimal.ONE, LocalDateTime.now());	
 	}
 	
-	public static List<BankStatement> getListBankStatement() { 
-		return List.of(getBankStatement(), getBankStatement());	
+	
+	public static List<StatementDTO> getListStatementDTO() { 
+		return List.of(getStatementDTO(), getStatementDTO());	
 	}
 	
 	public static BankTransaction getBankTransaction() {
