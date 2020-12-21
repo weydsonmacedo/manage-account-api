@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.donus.manageaccountapi.dto.response.BankStatementDTO;
 import br.com.donus.manageaccountapi.exceptions.BussinessException;
-import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankStatement;
 import br.com.donus.manageaccountapi.repository.BankStatementRepository;
 import br.com.donus.manageaccountapi.service.impl.BankAccountServiceImpl;
@@ -42,8 +41,8 @@ class BankStatementServiceImplTest {
 		BDDMockito.when(bankStatementRepositoryMock.save(ArgumentMatchers.any(BankStatement.class)))
 		.thenReturn(MockClasses.getBankStatement());
 		
-		BDDMockito.when(bankStatementRepositoryMock.findByBankAccount(ArgumentMatchers.any(BankAccount.class)))
-		.thenReturn(MockClasses.getListBankStatement());
+		BDDMockito.when(bankStatementRepositoryMock.findByIdBankAccount(ArgumentMatchers.any(Long.class)))
+		.thenReturn(MockClasses.getListStatementDTO());
 		
 		BDDMockito.when(baccMock.findByCpf(ArgumentMatchers.any(String.class)))
 		.thenReturn(MockClasses.getBankAccount());
@@ -65,7 +64,7 @@ class BankStatementServiceImplTest {
 	
 	@Test
 	void testGetStatementBussinesException() {
-		BDDMockito.when(bankStatementRepositoryMock.findByBankAccount(ArgumentMatchers.any()))
+		BDDMockito.when(bankStatementRepositoryMock.findByIdBankAccount(ArgumentMatchers.any()))
 		.thenReturn(List.of());
 		Assertions.assertThrows(BussinessException.class, () -> service.getStatement(MockClasses.getBankAccountDTOTest().getCpf()));
 		

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.donus.manageaccountapi.Utilities.Utilities;
 import br.com.donus.manageaccountapi.dto.response.BankStatementDTO;
+import br.com.donus.manageaccountapi.dto.response.StatementDTO;
 import br.com.donus.manageaccountapi.exceptions.BussinessException;
 import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankStatement;
@@ -52,14 +53,14 @@ public class BankStatementServiceImpl implements BankStatementService {
 	@Override
 	public BankStatementDTO getStatement(String cpf) {
 		BankAccount bacc = baccService.findByCpf(cpf);
-		List<BankStatement> ListStatement = bankStatementRepository.findByBankAccount(bacc);
-		
-		validateEmptyList(ListStatement);
-		return Utilities.parseListToBankStatementDTO(ListStatement);
+		//List<BankStatement> ListStatement = bankStatementRepository.findByBankAccount(bacc);
+		List<StatementDTO> list = bankStatementRepository.findByIdBankAccount(bacc.getId());
+		validateEmptyList(list);
+		return Utilities.parseListToBankStatementDTO(list, bacc);
 	}
 
-	private void validateEmptyList(List<BankStatement> ListStatement) {
-		if (ListStatement.isEmpty()) {
+	private void validateEmptyList(List<StatementDTO> list) {
+		if (list.isEmpty()) {
 			log.error("NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA: ");
 			throw new  BussinessException(HttpStatus.NO_CONTENT,"NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA");
 		}
