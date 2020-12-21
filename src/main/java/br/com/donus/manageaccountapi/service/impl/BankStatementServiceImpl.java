@@ -4,18 +4,22 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.donus.manageaccountapi.Utilities.Utilities;
 import br.com.donus.manageaccountapi.dto.response.BankStatementDTO;
+import br.com.donus.manageaccountapi.exceptions.BussinessException;
 import br.com.donus.manageaccountapi.model.BankAccount;
 import br.com.donus.manageaccountapi.model.BankStatement;
 import br.com.donus.manageaccountapi.model.BankTransaction;
 import br.com.donus.manageaccountapi.repository.BankStatementRepository;
 import br.com.donus.manageaccountapi.service.BankAccountService;
 import br.com.donus.manageaccountapi.service.BankStatementService;
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class BankStatementServiceImpl implements BankStatementService {
 
 	private BankStatementRepository bankStatementRepository;
@@ -49,7 +53,16 @@ public class BankStatementServiceImpl implements BankStatementService {
 	public BankStatementDTO getStatement(String cpf) {
 		BankAccount bacc = baccService.findByCpf(cpf);
 		List<BankStatement> ListStatement = bankStatementRepository.findByBankAccount(bacc);
+		
+		validateEmptyList(ListStatement);
 		return Utilities.parseListToBankStatementDTO(ListStatement);
+	}
+
+	private void validateEmptyList(List<BankStatement> ListStatement) {
+		if (ListStatement.isEmpty()) {
+			log.error("NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA: ");
+			throw new  BussinessException(HttpStatus.NO_CONTENT,"NÃO FORAM ENCONTRADOS EXTRATOS PARA ESSA CONTA");
+		}
 	}
 	
 	

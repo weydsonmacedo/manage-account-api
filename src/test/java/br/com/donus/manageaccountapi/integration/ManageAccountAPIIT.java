@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
@@ -39,6 +40,18 @@ public class ManageAccountAPIIT {
 	@Autowired
 	private ConfigurationsIT configurationsIT;
 	
+	@Test
+	@Order(0)
+	@DisplayName("Endpoint with wrong cpf to create a bank account  - > BankAccountController")
+	 void wrongCPF() {
+
+		 ResponseEntity<?> exchange = testRestTemplate.exchange("/bank-account/create", HttpMethod.POST, 
+				new HttpEntity<BankAccountDTO>(MockClasses.getBankAccountDTOTestWrongCPF(),configurationsIT.createHeadersWithAuthentication()),
+				Object.class);
+		 Assertions.assertTrue(exchange.getBody().toString().contains("CPF"));
+		  Assertions.assertEquals(exchange.getStatusCode(),HttpStatus.BAD_REQUEST);
+	}
+
 	@Test
 	@Order(1)
 	@DisplayName("Endpoint to create a bank account - > BankAccountController")
@@ -130,8 +143,6 @@ public class ManageAccountAPIIT {
 	@Order(6)
 	@DisplayName("Endpoint to get the statements of operations - > BankStatementController")
 	 void statement() {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("cpf", MockClasses.getBankAccountDTOTest().getCpf());
 
 		 ResponseEntity<BankStatementDTO> exchange = testRestTemplate.exchange("/bank-statement/statement/{cpf}", HttpMethod.GET, 
 				 new HttpEntity<>(configurationsIT.createHeadersWithAuthentication()),BankStatementDTO.class,
@@ -148,6 +159,19 @@ public class ManageAccountAPIIT {
 	
 	@Test
 	@Order(7)
+	@DisplayName("Endpoint to teste validate of cpf already exists for  the first account - > BankAccountController")
+	 void cpfAlreadyExists() {
+		 ResponseEntity<BankAccountInfoDTO> exchange = testRestTemplate.exchange("/bank-account/create", HttpMethod.POST, 
+					new HttpEntity<BankAccountDTO>(MockClasses.getBankAccountDTOTest(),configurationsIT.createHeadersWithAuthentication()),
+					BankAccountInfoDTO.class);
+			 
+		  Assertions.assertNotNull(exchange);
+		  Assertions.assertEquals(exchange.getStatusCode(),HttpStatus.CONFLICT);
+		  
+	}
+	
+	@Test
+	@Order(8)
 	@DisplayName("Endpoint to delete the first account - > BankAccountController")
 	 void delete() {
         Map<String, String> params = new HashMap<String, String>();
@@ -161,4 +185,19 @@ public class ManageAccountAPIIT {
 		  Assertions.assertEquals(body,"CONTA BANCÁRIA DELETADA COM SUCESSO");
 		  
 	}
+	
+	@Test
+	@Order(9)
+	@DisplayName("Endpoint to delete the second account - > BankAccountController")
+	 void deleteSecondAccount() {
+
+		 ResponseEntity<String> exchange = testRestTemplate.exchange("/bank-account/delete/{cpf}", HttpMethod.DELETE, 
+				 new HttpEntity<>(configurationsIT.createHeadersWithAuthentication()),String.class,
+				 MockClasses.getBankAccountDTOTest2().getCpf());
+		 String body = exchange.getBody();
+		  Assertions.assertNotNull(body);
+		  Assertions.assertEquals(body,"CONTA BANCÁRIA DELETADA COM SUCESSO");
+		  
+	}
+	
 }
