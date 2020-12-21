@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>br.com.donus.manage-account-api</groupId>
 	<artifactId>manage-account-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>manage-account-api</name>
 	<description>Projeto Desafio Donus, Gerenciamento de contas Bancárias.</description>
 
