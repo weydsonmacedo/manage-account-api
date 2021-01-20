@@ -2,7 +2,8 @@
 
 Projeto Desafio Donus, Gerenciamento de contas Bancárias.
 
-#Funcionalidade
+Funcionalidade
+-------
 - Para abrir uma conta é necessário apenas o nome completo e CPF da pessoa, mas só é permitido uma conta por pessoa;
 - Com essa conta é possível realizar transferências para outras contas, depositar e retirar o dinheiro;
 - Ao depositar dinheiro na conta, o cliente recebe da Donus mais meio por cento do valor depositado como bônus;
