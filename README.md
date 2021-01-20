@@ -38,7 +38,7 @@ Pre-requisitos para o Funcionamento:
 * O projeto conta com 3 Bancos de dados:
 * 1º - apontado para AWS, configurado para testes de desenvolvimento.
 * 2º - apontado para AWS pelo Elastic Beanstalk, ambiente em deploy, para testes remotos.
-* 3º - H2. configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
+* 3º - BANCO DE DADOS H2. Configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
 * O projeto tem a Autenticação do Tipo Basic. (Login e senha se encontram no código, e na pasta POSTMAN_ENDPOINTS, dentro do projeto)
 
 Instalação:
