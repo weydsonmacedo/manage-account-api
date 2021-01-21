@@ -15,21 +15,17 @@ import br.com.donus.manageaccountapi.dto.request.WithdrawDTO;
 import br.com.donus.manageaccountapi.dto.response.ResponseTransactionInfoDTO;
 import br.com.donus.manageaccountapi.service.DepositService;
 import br.com.donus.manageaccountapi.service.WithdrawService;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/account-operation")
+@RequiredArgsConstructor
 public class BankAccountOperationController {
 	
-	private DepositService depositService;
+	private final DepositService depositService;
 	
-	private WithdrawService drawService;
-	
-
-	public BankAccountOperationController(DepositService depositService, WithdrawService drawService) {
-		this.depositService = depositService;
-		this.drawService = drawService;
-	}
+	private final WithdrawService drawService;
 
 	@PostMapping(path = "/deposit")
 	@Transactional(rollbackFor = Exception.class)

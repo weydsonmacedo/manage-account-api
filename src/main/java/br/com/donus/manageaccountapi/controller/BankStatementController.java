@@ -10,17 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.donus.manageaccountapi.dto.response.BankStatementDTO;
 import br.com.donus.manageaccountapi.service.BankStatementService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/bank-statement")
+@RequiredArgsConstructor
 public class BankStatementController {
 
-	private BankStatementService bankStatementService;
+	private final BankStatementService bankStatementService;
 	
-	public BankStatementController(BankStatementService bankStatementService) {
-		this.bankStatementService = bankStatementService;
-	}
-
 	@GetMapping(path = "/statement/{cpf}")
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<BankStatementDTO> statement( @PathVariable String cpf) {

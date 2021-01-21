@@ -13,17 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.donus.manageaccountapi.dto.request.BankTransferDTO;
 import br.com.donus.manageaccountapi.dto.response.TransferResponseDTO;
 import br.com.donus.manageaccountapi.service.BankTransferService;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/bank-transfer")
+@RequiredArgsConstructor
 public class BankTransferController {
 
-	private BankTransferService bankTransferService;
-	
-	public BankTransferController(BankTransferService bankTransferService) {
-		this.bankTransferService = bankTransferService;
-	}
+	private final BankTransferService bankTransferService;
 
 	@PostMapping(path = "/transfer")
 	@Transactional(rollbackFor = Exception.class)

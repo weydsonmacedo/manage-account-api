@@ -15,18 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.donus.manageaccountapi.dto.request.BankAccountDTO;
 import br.com.donus.manageaccountapi.dto.response.BankAccountInfoDTO;
 import br.com.donus.manageaccountapi.service.BankAccountService;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/bank-account")
+@RequiredArgsConstructor
 public class BankAccountController {
 
-	private BankAccountService bankAccountService;
-		
-	
-	public BankAccountController(BankAccountService bankAccountService) {
-		this.bankAccountService = bankAccountService;
-	}
+	private final BankAccountService bankAccountService;
 
 	@PostMapping(path = "/create")
 	@Transactional(rollbackFor = Exception.class)
