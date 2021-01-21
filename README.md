@@ -2,6 +2,17 @@
 
 Projeto Desafio Donus, Gerenciamento de contas Bancárias.
 
+Funcionalidade
+-------
+- Para abrir uma conta é necessário apenas o nome completo e CPF da pessoa, mas só é permitido uma conta por pessoa;
+- Com essa conta é possível realizar transferências para outras contas, depositar e retirar o dinheiro;
+- Ao depositar dinheiro na conta, o cliente recebe da Donus mais meio por cento do valor depositado como bônus;
+- Ao retirar o dinheiro é cobrado o valor de um por cento sobre o valor retirado, e não aceitamos valores negativos nas contas;
+- Com essa conta é possível realizar transferências para outras contas e depositar;
+- Não aceitamos valores negativos nas contas;
+- As transferências entre contas são gratuitas e ilimitadas;
+- É importante ter o histórico de todas as movimentações dos clientes.
+
  Detalhes da Implementação
 -------
 
@@ -27,7 +38,7 @@ Pre-requisitos para o Funcionamento:
 * O projeto conta com 3 Bancos de dados:
 * 1º - apontado para AWS, configurado para testes de desenvolvimento.
 * 2º - apontado para AWS pelo Elastic Beanstalk, ambiente em deploy, para testes remotos.
-* 3º - H2. configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
+* 3º - BANCO DE DADOS H2. Configurado apenas para rodar as classes de Testes Unitários e Testes Integrados.
 * O projeto tem a Autenticação do Tipo Basic. (Login e senha se encontram no código, e na pasta POSTMAN_ENDPOINTS, dentro do projeto)
 
 Instalação:
